@@ -1,3 +1,4 @@
+import { WantScheduleFields } from "@/components/want-schedule-fields";
 import { createWant } from "@/app/wants/actions";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
@@ -65,6 +66,7 @@ export default async function NewWantPage({
             placeholder="Budget, sizing, links, timing…"
           />
         </label>
+        <WantScheduleFields />
         <label className="block space-y-2">
           <span className="text-sm font-medium">Image URLs</span>
           <textarea

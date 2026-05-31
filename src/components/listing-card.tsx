@@ -1,3 +1,4 @@
+import { ListingSchedule } from "@/components/listing-schedule";
 import Link from "next/link";
 
 export function ListingCard({
@@ -8,6 +9,8 @@ export function ListingCard({
   excerpt,
   imageUrl,
   meta,
+  scheduleLines,
+  scheduleExpired,
 }: {
   href?: string;
   title: string;
@@ -16,6 +19,8 @@ export function ListingCard({
   excerpt: string | null;
   imageUrl: string | null;
   meta: string;
+  scheduleLines?: string[];
+  scheduleExpired?: boolean;
 }) {
   const inner = (
     <>
@@ -51,6 +56,9 @@ export function ListingCard({
           <p className="mt-1 line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">
             {excerpt}
           </p>
+        ) : null}
+        {scheduleLines && scheduleLines.length > 0 ? (
+          <ListingSchedule lines={scheduleLines} expired={scheduleExpired} />
         ) : null}
         <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-500">{meta}</p>
       </div>

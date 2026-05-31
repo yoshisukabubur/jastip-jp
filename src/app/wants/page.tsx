@@ -1,5 +1,9 @@
 import { ListingCard } from "@/components/listing-card";
 import { firstImageUrl, formatRelativeTime } from "@/lib/image-urls";
+import {
+  wantScheduleLines,
+  type WantSchedule,
+} from "@/lib/schedule-dates";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 
@@ -11,13 +15,17 @@ type WantRow = {
   status: string;
   image_urls: unknown;
   created_at: string;
+  need_by_on: string | null;
+  timing_flexible: boolean;
 };
 
 export default async function WantsPage() {
   const supabase = await createClient();
   const { data: wants } = await supabase
     .from("wants")
-    .select("id, title, description, category, status, image_urls, created_at")
+    .select(
+      "id, title, description, category, status, image_urls, created_at, need_by_on, timing_flexible",
+    )
     .order("created_at", { ascending: false });
 
   const rows = (wants ?? []) as WantRow[];
@@ -44,18 +52,26 @@ export default async function WantsPage() {
             まだWants投稿がありません。Belum ada wants, jadi yang pertama yuk.
           </p>
         ) : (
-          rows.map((w) => (
-            <ListingCard
-              key={w.id}
-              href={`/wants/${w.id}`}
-              title={w.title}
-              category={w.category}
-              status={w.status}
-              excerpt={w.description}
-              imageUrl={firstImageUrl(w.image_urls)}
-              meta={`更新 / Diperbarui ${formatRelativeTime(w.created_at)}`}
-            />
-          ))
+          rows.map((w) => {
+            const schedule: WantSchedule = {
+              need_by_on: w.need_by_on,
+              timing_flexible: w.timing_flexible,
+            };
+            const lines = wantScheduleLines(schedule);
+            return (
+              <ListingCard
+                key={w.id}
+                href={`/wants/${w.id}`}
+                title={w.title}
+                category={w.category}
+                status={w.status}
+                excerpt={w.description}
+                imageUrl={firstImageUrl(w.image_urls)}
+                scheduleLines={lines}
+                meta={`更新 / Diperbarui ${formatRelativeTime(w.created_at)}`}
+              />
+            );
+          })
         )}
       </div>
     </main>

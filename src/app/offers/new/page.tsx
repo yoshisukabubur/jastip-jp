@@ -1,3 +1,4 @@
+import { OfferScheduleFields } from "@/components/offer-schedule-fields";
 import { createOffer } from "@/app/offers/actions";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
@@ -65,6 +66,7 @@ export default async function NewOfferPage({
             placeholder="Fees, shipping regions, cutoffs…"
           />
         </label>
+        <OfferScheduleFields />
         <label className="block space-y-2">
           <span className="text-sm font-medium">Image URLs</span>
           <textarea

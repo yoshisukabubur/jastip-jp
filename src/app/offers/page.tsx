@@ -1,5 +1,10 @@
 import { ListingCard } from "@/components/listing-card";
 import { firstImageUrl, formatRelativeTime } from "@/lib/image-urls";
+import {
+  offerScheduleExpired,
+  offerScheduleLines,
+  type OfferSchedule,
+} from "@/lib/schedule-dates";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 
@@ -11,13 +16,19 @@ type OfferRow = {
   status: string;
   image_urls: unknown;
   created_at: string;
+  shop_in_japan_on: string | null;
+  heading_to_indonesia_on: string | null;
+  order_cutoff_on: string | null;
+  schedule_note: string | null;
 };
 
 export default async function OffersPage() {
   const supabase = await createClient();
   const { data: offers } = await supabase
     .from("offers")
-    .select("id, title, description, category, status, image_urls, created_at")
+    .select(
+      "id, title, description, category, status, image_urls, created_at, shop_in_japan_on, heading_to_indonesia_on, order_cutoff_on, schedule_note",
+    )
     .order("created_at", { ascending: false });
 
   const rows = (offers ?? []) as OfferRow[];
@@ -44,18 +55,29 @@ export default async function OffersPage() {
             まだOffers投稿がありません。Belum ada offers, bagikan yang bisa kamu belikan.
           </p>
         ) : (
-          rows.map((o) => (
-            <ListingCard
-              key={o.id}
-              href={`/offers/${o.id}`}
-              title={o.title}
-              category={o.category}
-              status={o.status}
-              excerpt={o.description}
-              imageUrl={firstImageUrl(o.image_urls)}
-              meta={`更新 / Diperbarui ${formatRelativeTime(o.created_at)}`}
-            />
-          ))
+          rows.map((o) => {
+            const schedule: OfferSchedule = {
+              shop_in_japan_on: o.shop_in_japan_on,
+              heading_to_indonesia_on: o.heading_to_indonesia_on,
+              order_cutoff_on: o.order_cutoff_on,
+              schedule_note: o.schedule_note,
+            };
+            const lines = offerScheduleLines(schedule);
+            return (
+              <ListingCard
+                key={o.id}
+                href={`/offers/${o.id}`}
+                title={o.title}
+                category={o.category}
+                status={o.status}
+                excerpt={o.description}
+                imageUrl={firstImageUrl(o.image_urls)}
+                scheduleLines={lines}
+                scheduleExpired={offerScheduleExpired(schedule)}
+                meta={`更新 / Diperbarui ${formatRelativeTime(o.created_at)}`}
+              />
+            );
+          })
         )}
       </div>
     </main>

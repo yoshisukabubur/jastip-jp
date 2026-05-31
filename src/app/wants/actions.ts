@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { parseImageUrls } from "@/lib/image-urls";
+import { parseOptionalDate, parseTimingFlexible } from "@/lib/schedule-dates";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -17,6 +18,8 @@ export async function createWant(formData: FormData) {
   const category = String(formData.get("category") ?? "").trim() || null;
   const status = String(formData.get("status") ?? "active").trim() || "active";
   const image_urls = parseImageUrls(String(formData.get("image_urls") ?? ""));
+  const need_by_on = parseOptionalDate(formData.get("need_by_on"));
+  const timing_flexible = parseTimingFlexible(formData.get("timing_flexible"));
 
   if (!title) {
     redirect("/wants/new?error=missing-title");
@@ -31,6 +34,8 @@ export async function createWant(formData: FormData) {
       category,
       status,
       image_urls,
+      need_by_on,
+      timing_flexible,
     })
     .select("id")
     .single();

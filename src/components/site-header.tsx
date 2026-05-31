@@ -4,6 +4,7 @@ const nav = [
   { href: "/wants", label: "Wants / 欲しい" },
   { href: "/offers", label: "Offers / 買えます" },
   { href: "/trends", label: "Trends / 話題" },
+  { href: "/guide", label: "Guide / 案内" },
 ];
 
 export function SiteHeader({
@@ -38,6 +39,12 @@ export function SiteHeader({
         <div className="flex items-center gap-3">
           {signedIn ? (
             <>
+              <Link
+                href="/safety"
+                className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+              >
+                安全
+              </Link>
               <Link
                 href="/account"
                 className="max-w-[10rem] truncate text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"

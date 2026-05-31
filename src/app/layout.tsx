@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { createClient } from "@/lib/supabase/server";
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -48,6 +49,7 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
         <SiteHeader email={email} signedIn={signedIn} />
         <div className="flex-1">{children}</div>
+        <Analytics />
       </body>
     </html>
   );

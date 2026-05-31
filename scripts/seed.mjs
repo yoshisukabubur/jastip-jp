@@ -72,6 +72,8 @@ const WANTS = [
     description:
       "Cari plush restock bulan ini. Budget ~¥8,000. Bisa kirim foto asli sebelum bayar.",
     category: "Anime",
+    need_by_on: "2026-07-15",
+    timing_flexible: false,
     image_urls: [
       "https://images.unsplash.com/photo-1613771404721-1f92d799e49f?w=400&q=80",
     ],
@@ -172,6 +174,10 @@ const OFFERS = [
     description:
       "都内在住。限定ぬいぐるみ・グッズの店舗購入代行。送料・手数料はDMで見積もり。",
     category: "Anime",
+    shop_in_japan_on: "2026-06-10",
+    heading_to_indonesia_on: "2026-06-18",
+    order_cutoff_on: "2026-06-08",
+    schedule_note: "便遅延の可能性あり / Bisa terlambat",
     image_urls: [
       "https://images.unsplash.com/photo-1613771404721-1f92d799e49f?w=400&q=80",
     ],
