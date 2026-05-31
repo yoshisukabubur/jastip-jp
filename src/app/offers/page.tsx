@@ -22,7 +22,12 @@ type OfferRow = {
   schedule_note: string | null;
 };
 
-export default async function OffersPage() {
+export default async function OffersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ deleted?: string }>;
+}) {
+  const query = await searchParams;
   const supabase = await createClient();
   const { data: offers } = await supabase
     .from("offers")
@@ -49,6 +54,11 @@ export default async function OffersPage() {
           New offer / 投稿する
         </Link>
       </div>
+      {query.deleted ? (
+        <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
+          投稿を削除しました。
+        </p>
+      ) : null}
       <div className="space-y-4">
         {rows.length === 0 ? (
           <p className="rounded-2xl border border-dashed border-zinc-300 bg-white px-4 py-10 text-center text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400">

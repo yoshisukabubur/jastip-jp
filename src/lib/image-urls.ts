@@ -1,3 +1,10 @@
+export function formatImageUrlsForInput(urls: unknown): string {
+  if (!Array.isArray(urls)) return "";
+  return urls
+    .filter((u): u is string => typeof u === "string" && u.length > 0)
+    .join("\n");
+}
+
 export function parseImageUrls(raw: string): string[] {
   return raw
     .split(/\r?\n|,/)

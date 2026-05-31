@@ -1,3 +1,5 @@
+import { deleteWant } from "@/app/wants/actions";
+import { ListingOwnerActions } from "@/components/listing-owner-actions";
 import { ReportForm } from "@/components/report-form";
 import { ListingContactPanel } from "@/components/listing-contact-panel";
 import { getListingContactState } from "@/lib/listing-contact";
@@ -37,7 +39,7 @@ export default async function WantDetailPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ report?: string }>;
+  searchParams: Promise<{ report?: string; saved?: string; error?: string }>;
 }) {
   const { id } = await params;
   const query = await searchParams;
@@ -72,6 +74,7 @@ export default async function WantDetailPage({
     want.user_id,
     want.is_seed ?? false,
   );
+  const isOwner = Boolean(viewer?.id && want.user_id === viewer.id);
 
   return (
     <main className="mx-auto max-w-3xl space-y-8 px-4 py-12">
@@ -87,6 +90,24 @@ export default async function WantDetailPage({
         <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
           通報を受け付けました。
         </p>
+      ) : null}
+      {query.saved ? (
+        <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
+          保存しました。
+        </p>
+      ) : null}
+      {query.error ? (
+        <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
+          {decodeURIComponent(query.error)}
+        </p>
+      ) : null}
+      {isOwner ? (
+        <ListingOwnerActions
+          listingType="want"
+          listingId={want.id}
+          listingTitle={want.title}
+          deleteAction={deleteWant}
+        />
       ) : null}
       <article className="space-y-6 rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
         <div className="flex flex-wrap gap-2">
