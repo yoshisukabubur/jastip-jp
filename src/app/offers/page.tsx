@@ -1,5 +1,7 @@
+import { ListingSearchForm } from "@/components/listing-search-form";
 import { ListingCard } from "@/components/listing-card";
 import { firstImageUrl, formatRelativeTime } from "@/lib/image-urls";
+import { parseListingSearchParams } from "@/lib/listing-search";
 import {
   offerScheduleExpired,
   offerScheduleLines,
@@ -22,20 +24,44 @@ type OfferRow = {
   schedule_note: string | null;
 };
 
+const OFFER_STATUSES = [
+  { value: "active", label: "active" },
+  { value: "paused", label: "paused" },
+  { value: "closed", label: "closed" },
+];
+
 export default async function OffersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ deleted?: string }>;
+  searchParams: Promise<{
+    deleted?: string;
+    q?: string;
+    category?: string;
+    status?: string;
+  }>;
 }) {
-  const query = await searchParams;
+  const params = await searchParams;
+  const filters = parseListingSearchParams(params);
   const supabase = await createClient();
-  const { data: offers } = await supabase
+
+  let dbQuery = supabase
     .from("offers")
     .select(
       "id, title, description, category, status, image_urls, created_at, shop_in_japan_on, heading_to_indonesia_on, order_cutoff_on, schedule_note",
-    )
-    .order("created_at", { ascending: false });
+    );
 
+  if (filters.category) {
+    dbQuery = dbQuery.ilike("category", `%${filters.category}%`);
+  }
+  if (filters.status) {
+    dbQuery = dbQuery.eq("status", filters.status);
+  }
+  if (filters.q) {
+    const pattern = `%${filters.q}%`;
+    dbQuery = dbQuery.or(`title.ilike.${pattern},description.ilike.${pattern}`);
+  }
+
+  const { data: offers } = await dbQuery.order("created_at", { ascending: false });
   const rows = (offers ?? []) as OfferRow[];
 
   return (
@@ -54,15 +80,26 @@ export default async function OffersPage({
           New offer / 投稿する
         </Link>
       </div>
-      {query.deleted ? (
+      {params.deleted ? (
         <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
           投稿を削除しました。
         </p>
       ) : null}
+
+      <ListingSearchForm
+        basePath="/offers"
+        q={filters.q}
+        category={filters.category}
+        status={filters.status}
+        statusOptions={OFFER_STATUSES}
+      />
+
       <div className="space-y-4">
         {rows.length === 0 ? (
           <p className="rounded-2xl border border-dashed border-zinc-300 bg-white px-4 py-10 text-center text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400">
-            まだOffers投稿がありません。Belum ada offers, bagikan yang bisa kamu belikan.
+            {filters.hasFilters
+              ? "条件に合う投稿がありません。別のキーワードを試してください。"
+              : "まだOffers投稿がありません。Belum ada offers, bagikan yang bisa kamu belikan."}
           </p>
         ) : (
           rows.map((o) => {

@@ -1,5 +1,6 @@
 "use server";
 
+import { sendReportEmail } from "@/lib/send-report-email";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -45,6 +46,15 @@ export async function submitReport(formData: FormData) {
   if (error) {
     redirect(`${returnTo}?report=error`);
   }
+
+  await sendReportEmail({
+    listingType: listing_type,
+    listingId: listing_id,
+    reason,
+    details,
+    reporterEmail: user.email ?? null,
+    reporterId: user.id,
+  });
 
   revalidatePath(returnTo);
   redirect(`${returnTo}?report=thanks`);

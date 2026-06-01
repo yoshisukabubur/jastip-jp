@@ -1,5 +1,7 @@
+import { ListingSearchForm } from "@/components/listing-search-form";
 import { ListingCard } from "@/components/listing-card";
 import { firstImageUrl, formatRelativeTime } from "@/lib/image-urls";
+import { parseListingSearchParams } from "@/lib/listing-search";
 import {
   wantScheduleLines,
   type WantSchedule,
@@ -19,20 +21,44 @@ type WantRow = {
   timing_flexible: boolean;
 };
 
+const WANT_STATUSES = [
+  { value: "active", label: "active" },
+  { value: "fulfilled", label: "fulfilled" },
+  { value: "closed", label: "closed" },
+];
+
 export default async function WantsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ deleted?: string }>;
+  searchParams: Promise<{
+    deleted?: string;
+    q?: string;
+    category?: string;
+    status?: string;
+  }>;
 }) {
-  const query = await searchParams;
+  const params = await searchParams;
+  const filters = parseListingSearchParams(params);
   const supabase = await createClient();
-  const { data: wants } = await supabase
+
+  let dbQuery = supabase
     .from("wants")
     .select(
       "id, title, description, category, status, image_urls, created_at, need_by_on, timing_flexible",
-    )
-    .order("created_at", { ascending: false });
+    );
 
+  if (filters.category) {
+    dbQuery = dbQuery.ilike("category", `%${filters.category}%`);
+  }
+  if (filters.status) {
+    dbQuery = dbQuery.eq("status", filters.status);
+  }
+  if (filters.q) {
+    const pattern = `%${filters.q}%`;
+    dbQuery = dbQuery.or(`title.ilike.${pattern},description.ilike.${pattern}`);
+  }
+
+  const { data: wants } = await dbQuery.order("created_at", { ascending: false });
   const rows = (wants ?? []) as WantRow[];
 
   return (
@@ -51,15 +77,26 @@ export default async function WantsPage({
           New want / 投稿する
         </Link>
       </div>
-      {query.deleted ? (
+      {params.deleted ? (
         <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
           投稿を削除しました。
         </p>
       ) : null}
+
+      <ListingSearchForm
+        basePath="/wants"
+        q={filters.q}
+        category={filters.category}
+        status={filters.status}
+        statusOptions={WANT_STATUSES}
+      />
+
       <div className="space-y-4">
         {rows.length === 0 ? (
           <p className="rounded-2xl border border-dashed border-zinc-300 bg-white px-4 py-10 text-center text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400">
-            まだWants投稿がありません。Belum ada wants, jadi yang pertama yuk.
+            {filters.hasFilters
+              ? "条件に合う投稿がありません。別のキーワードを試してください。"
+              : "まだWants投稿がありません。Belum ada wants, jadi yang pertama yuk."}
           </p>
         ) : (
           rows.map((w) => {
