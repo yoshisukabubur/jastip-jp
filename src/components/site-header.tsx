@@ -4,7 +4,6 @@ const nav = [
   { href: "/wants", label: "Wants" },
   { href: "/offers", label: "Offers" },
   { href: "/trends", label: "Trends" },
-  { href: "/guide", label: "Guide" },
 ];
 
 export function SiteHeader({

@@ -36,24 +36,6 @@ export default function Home() {
         </div>
       </section>
 
-      <Link
-        href="/guide"
-        className="block rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6 shadow-sm transition hover:border-emerald-300 hover:shadow-md dark:border-emerald-900 dark:from-emerald-950/40 dark:to-zinc-950"
-      >
-        <p className="text-xs font-semibold uppercase tracking-wide text-emerald-800 dark:text-emerald-300">
-          New / Baru
-        </p>
-        <h2 className="mt-2 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
-          東京案内（予約制）/ Tur Tokyo dengan host
-        </h2>
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-          管理人がインドネシア向けにスポット案内。土日のみ・予約制。1日 ¥18,000〜（ガイド料のみ・実費別）
-        </p>
-        <span className="mt-4 inline-block text-sm font-medium text-emerald-700 dark:text-emerald-400">
-          Guide を見る / Lihat →
-        </span>
-      </Link>
-
       <section className="grid gap-6 sm:grid-cols-3">
         {[
           {
@@ -89,6 +71,16 @@ export default function Home() {
           </Link>
         ))}
       </section>
+
+      <p className="text-center text-xs text-zinc-500 dark:text-zinc-500">
+        来日予定の方へ —{" "}
+        <Link
+          href="/guide"
+          className="text-zinc-600 underline underline-offset-2 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200"
+        >
+          週末の東京案内（予約制）
+        </Link>
+      </p>
     </main>
   );
 }
