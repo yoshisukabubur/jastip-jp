@@ -19,19 +19,19 @@ export default function Home() {
             href="/wants"
             className="rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-700"
           >
-            Wantsを見る / Lihat Wants
+            Wants を見る
           </Link>
           <Link
             href="/offers"
             className="rounded-full border border-zinc-300 bg-white px-5 py-2.5 text-sm font-medium text-zinc-800 transition hover:border-zinc-400 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:hover:border-zinc-500"
           >
-            Offersを見る / Lihat Offers
+            Offers を見る
           </Link>
           <Link
             href="/trends"
             className="rounded-full border border-transparent px-5 py-2.5 text-sm font-medium text-emerald-800 underline-offset-4 hover:underline dark:text-emerald-300"
           >
-            Trendsを見る / Lihat Trends
+            Trends を見る
           </Link>
         </div>
       </section>

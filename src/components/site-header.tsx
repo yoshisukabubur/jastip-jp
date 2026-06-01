@@ -1,10 +1,10 @@
 import Link from "next/link";
 
 const nav = [
-  { href: "/wants", label: "Wants / 欲しい" },
-  { href: "/offers", label: "Offers / 買えます" },
-  { href: "/trends", label: "Trends / 話題" },
-  { href: "/guide", label: "Guide / 案内" },
+  { href: "/wants", label: "Wants" },
+  { href: "/offers", label: "Offers" },
+  { href: "/trends", label: "Trends" },
+  { href: "/guide", label: "Guide" },
 ];
 
 export function SiteHeader({
@@ -50,14 +50,14 @@ export function SiteHeader({
                 className="max-w-[10rem] truncate text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
                 title={email ?? undefined}
               >
-                Account / アカウント
+                アカウント
               </Link>
               <form action="/auth/sign-out" method="post">
                 <button
                   type="submit"
                   className="rounded-full border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-900"
                 >
-                  Sign out / ログアウト
+                  ログアウト
                 </button>
               </form>
             </>
@@ -66,7 +66,7 @@ export function SiteHeader({
               href="/login"
               className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-emerald-700"
             >
-              Sign in / ログイン
+              ログイン
             </Link>
           )}
         </div>

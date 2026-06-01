@@ -83,6 +83,12 @@ export default async function SafetyPage({
           <li>連絡先の交換・取引は当事者間で行います。</li>
           <li>代行・輸入は各国の法令・税・禁制品に注意してください。</li>
           <li>不審な投稿は下のフォームから通報できます。</li>
+          <li>
+            <Link href="/terms" className="text-emerald-700 underline dark:text-emerald-400">
+              利用規約
+            </Link>
+            をご確認ください。
+          </li>
         </ul>
       </section>
 

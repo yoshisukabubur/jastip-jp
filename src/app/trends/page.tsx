@@ -39,6 +39,7 @@ export default async function TrendsPage() {
           rows.map((t) => (
             <ListingCard
               key={t.id}
+              href={`/trends/${t.id}`}
               title={t.title}
               category={t.category}
               status={t.status}
