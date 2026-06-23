@@ -1,21 +1,5 @@
+import { BidirectionalFlowDiagram } from "@/components/bidirectional-flow-diagram";
 import Link from "next/link";
-
-const FLOW_ROWS = [
-  {
-    from: "🇯🇵",
-    to: "🇮🇩",
-    label: "Barang dari Jepang",
-    sub: "KitKat, skincare, anime goods…",
-    tone: "emerald",
-  },
-  {
-    from: "🇮🇩",
-    to: "🇯🇵",
-    label: "Barang dari Indonesia",
-    sub: "Indomie, sambal, snack lokal…",
-    tone: "sky",
-  },
-] as const;
 
 const STEPS = [
   {
@@ -93,34 +77,7 @@ export default function Home() {
         </div>
 
         <div className="mx-auto max-w-xl space-y-6">
-          {/* Bidirectional flow */}
-          <div className="space-y-3 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
-            <p className="text-center text-xs font-semibold uppercase tracking-wide text-zinc-500">
-              Dua arah / 双方向
-            </p>
-            {FLOW_ROWS.map((row) => (
-              <div
-                key={row.label}
-                className={`rounded-2xl border px-4 py-3 ${
-                  row.tone === "emerald"
-                    ? "border-emerald-200 bg-emerald-50/80 dark:border-emerald-900 dark:bg-emerald-950/30"
-                    : "border-sky-200 bg-sky-50/80 dark:border-sky-900 dark:bg-sky-950/30"
-                }`}
-              >
-                <div className="flex items-center justify-center gap-3 text-2xl">
-                  <span>{row.from}</span>
-                  <span className="text-sm text-zinc-400">→</span>
-                  <span>{row.to}</span>
-                </div>
-                <p className="mt-2 text-center text-sm font-semibold text-zinc-800 dark:text-zinc-200">
-                  {row.label}
-                </p>
-                <p className="text-center text-xs text-zinc-500 dark:text-zinc-400">
-                  {row.sub}
-                </p>
-              </div>
-            ))}
-          </div>
+          <BidirectionalFlowDiagram />
 
           {/* Who are you? — directly below Dua arah */}
           <div className="space-y-4">
