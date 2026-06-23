@@ -1,3 +1,4 @@
+import { CollapsibleFormSection } from "@/components/collapsible-form-section";
 import { OfferScheduleFields } from "@/components/offer-schedule-fields";
 import { ListingPostGuide } from "@/components/listing-post-guide";
 import { TemplateImagePicker } from "@/components/template-image-picker";
@@ -82,18 +83,23 @@ export default async function NewOfferPage({
             placeholder={OFFER_FORM.descriptionPlaceholder}
           />
         </label>
-        <OfferScheduleFields />
-        <label className="block space-y-2">
-          <span className="text-sm font-medium">
-            URL foto tambahan (opsional) / 追加画像
-          </span>
-          <input
-            name="custom_image_url"
-            type="url"
-            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
-            placeholder="https://..."
-          />
-        </label>
+        <CollapsibleFormSection
+          title="詳細を追加（任意）/ Tambah detail"
+          hint="日程・追加画像はあとからでもOK"
+        >
+          <OfferScheduleFields />
+          <label className="block space-y-2">
+            <span className="text-sm font-medium">
+              URL foto tambahan / 追加画像
+            </span>
+            <input
+              name="custom_image_url"
+              type="url"
+              className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
+              placeholder="https://..."
+            />
+          </label>
+        </CollapsibleFormSection>
         <button
           type="submit"
           className="w-full rounded-full bg-emerald-600 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"

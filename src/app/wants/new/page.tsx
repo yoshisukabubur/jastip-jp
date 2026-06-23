@@ -1,3 +1,4 @@
+import { CollapsibleFormSection } from "@/components/collapsible-form-section";
 import { WantScheduleFields } from "@/components/want-schedule-fields";
 import { ListingPostGuide } from "@/components/listing-post-guide";
 import { TemplateImagePicker } from "@/components/template-image-picker";
@@ -82,56 +83,61 @@ export default async function NewWantPage({
             placeholder={WANT_FORM.descriptionPlaceholder}
           />
         </label>
-        <WantScheduleFields />
-        <section className="space-y-3 rounded-2xl border border-zinc-200 bg-zinc-50/70 p-4 dark:border-zinc-800 dark:bg-zinc-900/30">
-          <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-            配送先 / Tujuan pengiriman
-          </h2>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            詳細住所は書かず、まずは都市とエリアだけ入力してください。
-          </p>
-          <div className="grid gap-3 sm:grid-cols-2">
+        <CollapsibleFormSection
+          title="詳細を追加（任意）/ Tambah detail"
+          hint="日程・配送先・追加画像はあとからでもOK"
+        >
+          <WantScheduleFields />
+          <section className="space-y-3">
+            <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+              配送先 / Tujuan pengiriman
+            </h2>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              詳細住所は書かず、まずは都市とエリアだけ入力してください。
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label className="block space-y-2">
+                <span className="text-sm font-medium">都市 / Kota</span>
+                <input
+                  name="delivery_city"
+                  className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
+                  placeholder="Jakarta"
+                />
+              </label>
+              <label className="block space-y-2">
+                <span className="text-sm font-medium">州・県 / Provinsi</span>
+                <input
+                  name="delivery_region"
+                  className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
+                  placeholder="DKI Jakarta"
+                />
+              </label>
+            </div>
             <label className="block space-y-2">
-              <span className="text-sm font-medium">都市 / Kota</span>
-              <input
-                name="delivery_city"
+              <span className="text-sm font-medium">備考 / Catatan</span>
+              <textarea
+                name="delivery_note"
+                rows={3}
                 className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
-                placeholder="Jakarta"
+                placeholder="Contoh: bisa kirim ke rumah / kantor."
               />
             </label>
-            <label className="block space-y-2">
-              <span className="text-sm font-medium">州・県 / Provinsi</span>
-              <input
-                name="delivery_region"
-                className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
-                placeholder="DKI Jakarta"
-              />
-            </label>
-          </div>
+          </section>
           <label className="block space-y-2">
-            <span className="text-sm font-medium">備考（任意） / Catatan</span>
-            <textarea
-              name="delivery_note"
-              rows={3}
+            <span className="text-sm font-medium">
+              URL foto tambahan / 追加画像
+            </span>
+            <input
+              name="custom_image_url"
+              type="url"
               className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
-              placeholder="Contoh: bisa kirim ke rumah / kantor."
+              placeholder="https://..."
             />
+            <p className="text-xs text-zinc-500 dark:text-zinc-500">
+              Link foto produk asli (Shopee, IG, dll.) membuat posting lebih dipercaya.
+            </p>
           </label>
-        </section>
-        <label className="block space-y-2">
-          <span className="text-sm font-medium">
-            URL foto tambahan (opsional) / 追加画像
-          </span>
-          <input
-            name="custom_image_url"
-            type="url"
-            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
-            placeholder="https://..."
-          />
-          <p className="text-xs text-zinc-500 dark:text-zinc-500">
-            Link foto produk asli (Shopee, IG, dll.) membuat posting lebih dipercaya.
-          </p>
-        </label>
+        </CollapsibleFormSection>
         <button
           type="submit"
           className="w-full rounded-full bg-emerald-600 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"

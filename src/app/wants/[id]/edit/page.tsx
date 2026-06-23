@@ -1,3 +1,4 @@
+import { CollapsibleFormSection } from "@/components/collapsible-form-section";
 import { updateWant } from "@/app/wants/actions";
 import { WantScheduleFields } from "@/components/want-schedule-fields";
 import {
@@ -62,6 +63,14 @@ export default async function EditWantPage({
     !LISTING_TEMPLATE_IMAGES.some((template) => template.url === imageUrls[0])
       ? imageUrls[0]
       : "";
+  const hasOptionalDetails = Boolean(
+    want.need_by_on ||
+      want.timing_flexible ||
+      want.delivery_city ||
+      want.delivery_region ||
+      want.delivery_note ||
+      customImageUrl,
+  );
 
   return (
     <main className="mx-auto max-w-xl space-y-8 px-4 py-12">
@@ -119,42 +128,57 @@ export default async function EditWantPage({
             className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
           />
         </label>
-        <WantScheduleFields
-          needByOn={want.need_by_on ?? ""}
-          timingFlexible={want.timing_flexible}
-        />
-        <section className="space-y-3 rounded-2xl border border-zinc-200 bg-zinc-50/70 p-4 dark:border-zinc-800 dark:bg-zinc-900/30">
-          <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-            配送先 / Tujuan pengiriman
-          </h2>
-          <div className="grid gap-3 sm:grid-cols-2">
+        <CollapsibleFormSection
+          title="詳細を追加（任意）/ Tambah detail"
+          defaultOpen={hasOptionalDetails}
+        >
+          <WantScheduleFields
+            needByOn={want.need_by_on ?? ""}
+            timingFlexible={want.timing_flexible}
+          />
+          <section className="space-y-3">
+            <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+              配送先 / Tujuan pengiriman
+            </h2>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label className="block space-y-2">
+                <span className="text-sm font-medium">都市 / Kota</span>
+                <input
+                  name="delivery_city"
+                  defaultValue={want.delivery_city ?? ""}
+                  className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
+                />
+              </label>
+              <label className="block space-y-2">
+                <span className="text-sm font-medium">州・県 / Provinsi</span>
+                <input
+                  name="delivery_region"
+                  defaultValue={want.delivery_region ?? ""}
+                  className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
+                />
+              </label>
+            </div>
             <label className="block space-y-2">
-              <span className="text-sm font-medium">都市 / Kota</span>
-              <input
-                name="delivery_city"
-                defaultValue={want.delivery_city ?? ""}
+              <span className="text-sm font-medium">備考 / Catatan</span>
+              <textarea
+                name="delivery_note"
+                rows={3}
+                defaultValue={want.delivery_note ?? ""}
                 className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
               />
             </label>
-            <label className="block space-y-2">
-              <span className="text-sm font-medium">州・県 / Provinsi</span>
-              <input
-                name="delivery_region"
-                defaultValue={want.delivery_region ?? ""}
-                className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
-              />
-            </label>
-          </div>
+          </section>
           <label className="block space-y-2">
-            <span className="text-sm font-medium">備考（任意） / Catatan</span>
-            <textarea
-              name="delivery_note"
-              rows={3}
-              defaultValue={want.delivery_note ?? ""}
+            <span className="text-sm font-medium">Additional image URL</span>
+            <input
+              name="custom_image_url"
+              type="url"
+              defaultValue={customImageUrl}
               className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
+              placeholder="https://..."
             />
           </label>
-        </section>
+        </CollapsibleFormSection>
         <label className="block space-y-2">
           <span className="text-sm font-medium">Template image (required)</span>
           <select
@@ -175,16 +199,6 @@ export default async function EditWantPage({
               </optgroup>
             ))}
           </select>
-        </label>
-        <label className="block space-y-2">
-          <span className="text-sm font-medium">Additional image URL (optional)</span>
-          <input
-            name="custom_image_url"
-            type="url"
-            defaultValue={customImageUrl}
-            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
-            placeholder="https://..."
-          />
         </label>
         <label className="block space-y-2">
           <span className="text-sm font-medium">Status</span>

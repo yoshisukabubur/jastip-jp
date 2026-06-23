@@ -1,3 +1,4 @@
+import { CollapsibleFormSection } from "@/components/collapsible-form-section";
 import { updateOffer } from "@/app/offers/actions";
 import { OfferScheduleFields } from "@/components/offer-schedule-fields";
 import {
@@ -61,6 +62,13 @@ export default async function EditOfferPage({
     !LISTING_TEMPLATE_IMAGES.some((template) => template.url === imageUrls[0])
       ? imageUrls[0]
       : "";
+  const hasOptionalDetails = Boolean(
+    offer.shop_in_japan_on ||
+      offer.heading_to_indonesia_on ||
+      offer.order_cutoff_on ||
+      offer.schedule_note ||
+      customImageUrl,
+  );
 
   return (
     <main className="mx-auto max-w-xl space-y-8 px-4 py-12">
@@ -118,12 +126,27 @@ export default async function EditOfferPage({
             className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
           />
         </label>
-        <OfferScheduleFields
-          shopInJapanOn={offer.shop_in_japan_on ?? ""}
-          headingToIndonesiaOn={offer.heading_to_indonesia_on ?? ""}
-          orderCutoffOn={offer.order_cutoff_on ?? ""}
-          scheduleNote={offer.schedule_note ?? ""}
-        />
+        <CollapsibleFormSection
+          title="詳細を追加（任意）/ Tambah detail"
+          defaultOpen={hasOptionalDetails}
+        >
+          <OfferScheduleFields
+            shopInJapanOn={offer.shop_in_japan_on ?? ""}
+            headingToIndonesiaOn={offer.heading_to_indonesia_on ?? ""}
+            orderCutoffOn={offer.order_cutoff_on ?? ""}
+            scheduleNote={offer.schedule_note ?? ""}
+          />
+          <label className="block space-y-2">
+            <span className="text-sm font-medium">Additional image URL</span>
+            <input
+              name="custom_image_url"
+              type="url"
+              defaultValue={customImageUrl}
+              className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
+              placeholder="https://..."
+            />
+          </label>
+        </CollapsibleFormSection>
         <label className="block space-y-2">
           <span className="text-sm font-medium">Template image (required)</span>
           <select
@@ -144,16 +167,6 @@ export default async function EditOfferPage({
               </optgroup>
             ))}
           </select>
-        </label>
-        <label className="block space-y-2">
-          <span className="text-sm font-medium">Additional image URL (optional)</span>
-          <input
-            name="custom_image_url"
-            type="url"
-            defaultValue={customImageUrl}
-            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
-            placeholder="https://..."
-          />
         </label>
         <label className="block space-y-2">
           <span className="text-sm font-medium">Status</span>
