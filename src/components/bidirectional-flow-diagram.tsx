@@ -103,7 +103,7 @@ export function BidirectionalFlowDiagram() {
       </div>
 
       <p className="mt-3 text-center text-[11px] text-zinc-500 dark:text-zinc-400">
-        ↓ 下で役割を選んで投稿
+        ↓ 例を見て、下のボタンで投稿
       </p>
     </div>
   );

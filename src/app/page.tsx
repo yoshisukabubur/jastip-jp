@@ -1,6 +1,41 @@
 import { BidirectionalFlowDiagram } from "@/components/bidirectional-flow-diagram";
 import Link from "next/link";
 
+const SCENARIOS = [
+  {
+    flag: "🇯🇵",
+    label: "日本でほしいもの",
+    sublabel: "Cari di Jepang",
+    example: "Indomie, sambal, bumbu…",
+    type: "Want",
+    href: "/wants/new",
+  },
+  {
+    flag: "🇮🇩",
+    label: "インドネシアでほしいもの",
+    sublabel: "Cari di Indonesia",
+    example: "KitKat, skincare, anime goods…",
+    type: "Want",
+    href: "/wants/new",
+  },
+  {
+    flag: "🇯🇵",
+    label: "日本で買えます",
+    sublabel: "Bisa bantu di Jepang",
+    example: "Belanja konbini, Don Quijote…",
+    type: "Offer",
+    href: "/offers/new",
+  },
+  {
+    flag: "🇮🇩",
+    label: "インドネシアで買えます",
+    sublabel: "Bisa bantu dari Indonesia",
+    example: "Ke Tokyo, bawa snack lokal…",
+    type: "Offer",
+    href: "/offers/new",
+  },
+] as const;
+
 const STEPS = [
   {
     step: "1",
@@ -16,37 +51,6 @@ const STEPS = [
     step: "3",
     title: "Sepakati sendiri",
     body: "Harga, ongkir, dan pengiriman diatur antar pengguna.",
-  },
-];
-
-const EXAMPLES = [
-  {
-    type: "Want",
-    icon: "🎯",
-    title: "Cari KitKat matcha + sambal ABC",
-    meta: "Jakarta → dari Jepang",
-    href: "/wants",
-  },
-  {
-    type: "Want",
-    icon: "🎯",
-    title: "Butuh Indomie & bumbu dari Indonesia",
-    meta: "Tokyo → dari Indonesia",
-    href: "/wants",
-  },
-  {
-    type: "Offer",
-    icon: "🛍️",
-    title: "Belanja konbini weekend — area Shinjuku",
-    meta: "Jepang → ke Indonesia",
-    href: "/offers",
-  },
-  {
-    type: "Offer",
-    icon: "🛍️",
-    title: "Ke Tokyo 20 Juni, bisa bawa snack ID",
-    meta: "Indonesia → ke Jepang",
-    href: "/offers",
   },
 ];
 
@@ -79,68 +83,105 @@ export default function Home() {
         <div className="mx-auto max-w-xl space-y-6">
           <BidirectionalFlowDiagram />
 
-          {/* Who are you? — directly below Dua arah */}
-          <div className="space-y-4">
+          {/* 案A: 4 examples + 2 main buttons */}
+          <div className="space-y-5">
             <div className="text-center">
               <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">
                 Kamu mau apa? / あなたはどっち？
               </h2>
               <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-                迷ったら、まずここから選んでください。
+                4つの例から近いものを探して、下のボタンで投稿。
               </p>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="flex flex-col rounded-3xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-5 shadow-sm dark:border-emerald-900 dark:from-emerald-950/40 dark:to-zinc-950">
-                <span className="text-3xl" aria-hidden>
+
+            <div className="grid grid-cols-2 gap-2 sm:gap-3">
+              {SCENARIOS.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={`rounded-2xl border p-3 transition hover:shadow-sm sm:p-4 ${
+                    item.type === "Want"
+                      ? "border-emerald-200/80 bg-emerald-50/50 hover:border-emerald-300 dark:border-emerald-900/60 dark:bg-emerald-950/20 dark:hover:border-emerald-800"
+                      : "border-zinc-200 bg-zinc-50/50 hover:border-emerald-200 dark:border-zinc-700 dark:bg-zinc-900/30 dark:hover:border-emerald-900"
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-lg" aria-hidden>
+                      {item.flag}
+                    </span>
+                    <span
+                      className={`text-[10px] font-semibold uppercase tracking-wide sm:text-[11px] ${
+                        item.type === "Want"
+                          ? "text-emerald-700 dark:text-emerald-400"
+                          : "text-zinc-500 dark:text-zinc-400"
+                      }`}
+                    >
+                      {item.type}
+                    </span>
+                  </div>
+                  <p className="mt-1.5 text-xs font-semibold leading-snug text-zinc-900 sm:text-sm dark:text-zinc-50">
+                    {item.label}
+                  </p>
+                  <p className="text-[10px] text-zinc-500 sm:text-xs dark:text-zinc-400">
+                    {item.sublabel}
+                  </p>
+                  <p className="mt-1 text-[10px] leading-relaxed text-zinc-600 sm:text-xs dark:text-zinc-400">
+                    e.g. {item.example}
+                  </p>
+                </Link>
+              ))}
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Link
+                href="/wants/new"
+                className="flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-4 py-4 text-center font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+              >
+                <span className="text-xl" aria-hidden>
                   🎯
                 </span>
-                <h3 className="mt-3 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                  Cari barang / 欲しいもの
-                </h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                  欲しい商品を投稿して、代行してくれる人を探す。
-                </p>
-                <div className="mt-4 flex flex-col gap-2">
-                  <Link
-                    href="/wants/new"
-                    className="rounded-full bg-emerald-600 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-emerald-700"
-                  >
-                    投稿する / Posting
-                  </Link>
-                  <Link
-                    href="/wants"
-                    className="text-center text-xs font-medium text-emerald-700 hover:underline dark:text-emerald-400"
-                  >
-                    一覧を見る →
-                  </Link>
-                </div>
-              </div>
-
-              <div className="flex flex-col rounded-3xl border-2 border-zinc-200 bg-gradient-to-br from-zinc-50 to-white p-5 shadow-sm dark:border-zinc-700 dark:from-zinc-900/40 dark:to-zinc-950">
-                <span className="text-3xl" aria-hidden>
+                <span>
+                  欲しいものを投稿
+                  <span className="mt-0.5 block text-xs font-medium text-emerald-100">
+                    Posting Want
+                  </span>
+                </span>
+              </Link>
+              <Link
+                href="/offers/new"
+                className="flex items-center justify-center gap-2 rounded-2xl border-2 border-emerald-600 bg-white px-4 py-4 text-center font-semibold text-emerald-800 shadow-sm transition hover:bg-emerald-50 dark:bg-zinc-950 dark:text-emerald-300 dark:hover:bg-emerald-950/40"
+              >
+                <span className="text-xl" aria-hidden>
                   🛍️
                 </span>
-                <h3 className="mt-3 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                  Bisa bantu / 買えます
-                </h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                  代行・持ち帰りできる人は、エリアと日程を書いて出品。
-                </p>
-                <div className="mt-4 flex flex-col gap-2">
-                  <Link
-                    href="/offers/new"
-                    className="rounded-full border-2 border-emerald-600 py-2.5 text-center text-sm font-semibold text-emerald-800 transition hover:bg-emerald-50 dark:text-emerald-300 dark:hover:bg-emerald-950/40"
-                  >
-                    投稿する / Posting
-                  </Link>
-                  <Link
-                    href="/offers"
-                    className="text-center text-xs font-medium text-emerald-700 hover:underline dark:text-emerald-400"
-                  >
-                    一覧を見る →
-                  </Link>
-                </div>
-              </div>
+                <span>
+                  買えますを投稿
+                  <span className="mt-0.5 block text-xs font-medium text-emerald-700/80 dark:text-emerald-400/80">
+                    Posting Offer
+                  </span>
+                </span>
+              </Link>
+            </div>
+
+            <div className="flex justify-center gap-6 text-sm">
+              <Link
+                href="/wants"
+                className="font-medium text-emerald-700 hover:underline dark:text-emerald-400"
+              >
+                Wants 一覧 →
+              </Link>
+              <Link
+                href="/offers"
+                className="font-medium text-emerald-700 hover:underline dark:text-emerald-400"
+              >
+                Offers 一覧 →
+              </Link>
+              <Link
+                href="/trends"
+                className="font-medium text-zinc-600 hover:underline dark:text-zinc-400"
+              >
+                📈 Trends
+              </Link>
             </div>
           </div>
         </div>
@@ -169,48 +210,6 @@ export default function Home() {
             </li>
           ))}
         </ol>
-      </section>
-
-      {/* Examples */}
-      <section className="space-y-4">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h2 className="text-2xl font-semibold tracking-tight">
-              Contoh posting / 投稿例
-            </h2>
-            <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-              こんな感じで書けます。
-            </p>
-          </div>
-          <Link
-            href="/trends"
-            className="text-sm font-medium text-emerald-700 hover:underline dark:text-emerald-400"
-          >
-            📈 Trends も見る
-          </Link>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {EXAMPLES.map((ex) => (
-            <Link
-              key={ex.title}
-              href={ex.href}
-              className="flex items-start gap-3 rounded-2xl border border-zinc-200 bg-white p-4 transition hover:border-emerald-200 hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-emerald-900"
-            >
-              <span className="text-xl" aria-hidden>
-                {ex.icon}
-              </span>
-              <div className="min-w-0">
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
-                  {ex.type}
-                </p>
-                <p className="mt-0.5 font-medium text-zinc-900 dark:text-zinc-50">
-                  {ex.title}
-                </p>
-                <p className="mt-1 text-xs text-zinc-500">{ex.meta}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
       </section>
 
       {/* CTA */}
