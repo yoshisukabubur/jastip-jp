@@ -69,30 +69,30 @@ const EXAMPLES = [
 export default function Home() {
   return (
     <main className="mx-auto flex max-w-5xl flex-col gap-14 px-4 py-12 sm:px-6 sm:py-20">
-      {/* Hero */}
-      <section className="space-y-6">
-        <p className="text-sm font-medium uppercase tracking-[0.2em] text-emerald-700 dark:text-emerald-400">
-          Jastip Community / Komunitas Jastip
-        </p>
-        <div className="grid gap-8 lg:grid-cols-[1fr,minmax(0,20rem)] lg:items-center">
-          <div className="space-y-5">
-            <h1 className="text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-50">
-              日本とインドネシアを、
-              <span className="text-emerald-700 dark:text-emerald-400"> 欲しいもの</span>
-              でつなぐ。
-            </h1>
-            <p className="max-w-xl text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
-              JastipJP は無料の掲示板です。日本→インドネシア、インドネシア→日本、
-              どちらの titip もOK。Komunitas kecil pun bisa mulai cepat.
-            </p>
-            <p className="text-sm text-zinc-500 dark:text-zinc-500">
-              決済・配送の保証はありません。取引は当事者間で行います。{" "}
-              <Link href="/safety" className="text-emerald-700 underline dark:text-emerald-400">
-                安全ガイド
-              </Link>
-            </p>
-          </div>
+      {/* Hero + flow + choice */}
+      <section className="space-y-8">
+        <div className="space-y-5">
+          <p className="text-sm font-medium uppercase tracking-[0.2em] text-emerald-700 dark:text-emerald-400">
+            Jastip Community / Komunitas Jastip
+          </p>
+          <h1 className="max-w-2xl text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl dark:text-zinc-50">
+            日本とインドネシアを、
+            <span className="text-emerald-700 dark:text-emerald-400"> 欲しいもの</span>
+            でつなぐ。
+          </h1>
+          <p className="max-w-xl text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
+            JastipJP は無料の掲示板です。日本→インドネシア、インドネシア→日本、
+            どちらの titip もOK。Komunitas kecil pun bisa mulai cepat.
+          </p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-500">
+            決済・配送の保証はありません。取引は当事者間で行います。{" "}
+            <Link href="/safety" className="text-emerald-700 underline dark:text-emerald-400">
+              安全ガイド
+            </Link>
+          </p>
+        </div>
 
+        <div className="mx-auto max-w-xl space-y-6">
           {/* Bidirectional flow */}
           <div className="space-y-3 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
             <p className="text-center text-xs font-semibold uppercase tracking-wide text-zinc-500">
@@ -120,107 +120,72 @@ export default function Home() {
                 </p>
               </div>
             ))}
-            <div className="space-y-2 border-t border-zinc-200 pt-4 dark:border-zinc-800">
-              <p className="text-center text-xs font-medium text-zinc-600 dark:text-zinc-400">
-                Langsung posting / 今すぐ投稿
+          </div>
+
+          {/* Who are you? — directly below Dua arah */}
+          <div className="space-y-4">
+            <div className="text-center">
+              <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">
+                Kamu mau apa? / あなたはどっち？
+              </h2>
+              <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                迷ったら、まずここから選んでください。
               </p>
-              <div className="grid grid-cols-2 gap-2">
-                <Link
-                  href="/wants/new"
-                  className="flex flex-col items-center gap-1 rounded-2xl bg-emerald-600 px-3 py-3 text-center text-white shadow-sm transition hover:bg-emerald-700"
-                >
-                  <span className="text-xl" aria-hidden>
-                    🎯
-                  </span>
-                  <span className="text-xs font-semibold leading-tight sm:text-sm">
-                    欲しいもの
-                  </span>
-                  <span className="text-[10px] font-medium text-emerald-100 sm:text-xs">
-                    Cari barang
-                  </span>
-                </Link>
-                <Link
-                  href="/offers/new"
-                  className="flex flex-col items-center gap-1 rounded-2xl border-2 border-emerald-600 bg-white px-3 py-3 text-center text-emerald-800 shadow-sm transition hover:bg-emerald-50 dark:bg-zinc-950 dark:text-emerald-300 dark:hover:bg-emerald-950/40"
-                >
-                  <span className="text-xl" aria-hidden>
-                    🛍️
-                  </span>
-                  <span className="text-xs font-semibold leading-tight sm:text-sm">
-                    買えます
-                  </span>
-                  <span className="text-[10px] font-medium text-emerald-700/80 dark:text-emerald-400/80 sm:text-xs">
-                    Bisa bantu
-                  </span>
-                </Link>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="flex flex-col rounded-3xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-5 shadow-sm dark:border-emerald-900 dark:from-emerald-950/40 dark:to-zinc-950">
+                <span className="text-3xl" aria-hidden>
+                  🎯
+                </span>
+                <h3 className="mt-3 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+                  Cari barang / 欲しいもの
+                </h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                  欲しい商品を投稿して、代行してくれる人を探す。
+                </p>
+                <div className="mt-4 flex flex-col gap-2">
+                  <Link
+                    href="/wants/new"
+                    className="rounded-full bg-emerald-600 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-emerald-700"
+                  >
+                    投稿する / Posting
+                  </Link>
+                  <Link
+                    href="/wants"
+                    className="text-center text-xs font-medium text-emerald-700 hover:underline dark:text-emerald-400"
+                  >
+                    一覧を見る →
+                  </Link>
+                </div>
               </div>
-              <div className="flex justify-center gap-4 text-[11px] text-zinc-500">
-                <Link href="/wants" className="hover:text-emerald-700 dark:hover:text-emerald-400">
-                  Wants 一覧
-                </Link>
-                <Link href="/offers" className="hover:text-emerald-700 dark:hover:text-emerald-400">
-                  Offers 一覧
-                </Link>
+
+              <div className="flex flex-col rounded-3xl border-2 border-zinc-200 bg-gradient-to-br from-zinc-50 to-white p-5 shadow-sm dark:border-zinc-700 dark:from-zinc-900/40 dark:to-zinc-950">
+                <span className="text-3xl" aria-hidden>
+                  🛍️
+                </span>
+                <h3 className="mt-3 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+                  Bisa bantu / 買えます
+                </h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                  代行・持ち帰りできる人は、エリアと日程を書いて出品。
+                </p>
+                <div className="mt-4 flex flex-col gap-2">
+                  <Link
+                    href="/offers/new"
+                    className="rounded-full border-2 border-emerald-600 py-2.5 text-center text-sm font-semibold text-emerald-800 transition hover:bg-emerald-50 dark:text-emerald-300 dark:hover:bg-emerald-950/40"
+                  >
+                    投稿する / Posting
+                  </Link>
+                  <Link
+                    href="/offers"
+                    className="text-center text-xs font-medium text-emerald-700 hover:underline dark:text-emerald-400"
+                  >
+                    一覧を見る →
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Who are you? */}
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-2xl font-semibold tracking-tight">
-            Kamu mau apa? / あなたはどっち？
-          </h2>
-          <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-            迷ったら、まずここから選んでください。
-          </p>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Link
-            href="/wants"
-            className="group flex flex-col rounded-3xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-400 hover:shadow-md dark:border-emerald-900 dark:from-emerald-950/40 dark:to-zinc-950"
-          >
-            <span className="text-3xl" aria-hidden>
-              🎯
-            </span>
-            <h3 className="mt-3 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
-              Cari barang / 欲しいもの
-            </h3>
-            <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-              日本の商品も、インドネシアの商品も。欲しいものを投稿して、代行してくれる人を探す。
-            </p>
-            <ul className="mt-4 space-y-1 text-xs text-zinc-500 dark:text-zinc-400">
-              <li>· KitKat limited, skincare Jepang</li>
-              <li>· Indomie, sambal (untuk di Jepang)</li>
-            </ul>
-            <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-emerald-700 dark:text-emerald-400">
-              Buka Wants →
-            </span>
-          </Link>
-
-          <Link
-            href="/offers"
-            className="group flex flex-col rounded-3xl border-2 border-zinc-200 bg-gradient-to-br from-zinc-50 to-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md dark:border-zinc-700 dark:from-zinc-900/40 dark:to-zinc-950"
-          >
-            <span className="text-3xl" aria-hidden>
-              🛍️
-            </span>
-            <h3 className="mt-3 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
-              Bisa bantu / 買えます
-            </h3>
-            <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-              買い物代行・持ち帰りができる人は、エリアと日程を書いて出品する。
-            </p>
-            <ul className="mt-4 space-y-1 text-xs text-zinc-500 dark:text-zinc-400">
-              <li>· Belanja konbini / Don Quijote</li>
-              <li>· Ke Tokyo, bisa bawa snack Indonesia</li>
-            </ul>
-            <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-emerald-700 dark:text-emerald-400">
-              Buka Offers →
-            </span>
-          </Link>
         </div>
       </section>
 
