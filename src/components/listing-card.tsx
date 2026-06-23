@@ -11,6 +11,7 @@ export function ListingCard({
   meta,
   scheduleLines,
   scheduleExpired,
+  isSample,
 }: {
   href?: string;
   title: string;
@@ -21,6 +22,7 @@ export function ListingCard({
   meta: string;
   scheduleLines?: string[];
   scheduleExpired?: boolean;
+  isSample?: boolean;
 }) {
   const inner = (
     <>
@@ -48,6 +50,11 @@ export function ListingCard({
           <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200">
             {status}
           </span>
+          {isSample ? (
+            <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-600 dark:bg-zinc-900 dark:text-zinc-400">
+              Contoh / サンプル
+            </span>
+          ) : null}
         </div>
         <h2 className="mt-1 text-base font-semibold text-zinc-900 group-hover:text-emerald-700 dark:text-zinc-50 dark:group-hover:text-emerald-300">
           {title}

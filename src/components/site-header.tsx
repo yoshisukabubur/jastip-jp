@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 const nav = [
-  { href: "/wants", label: "Wants" },
-  { href: "/offers", label: "Offers" },
-  { href: "/trends", label: "Trends" },
+  { href: "/wants", label: "Wants", sublabel: "欲しい", icon: "🎯" },
+  { href: "/offers", label: "Offers", sublabel: "買えます", icon: "🛍️" },
+  { href: "/trends", label: "Trends", sublabel: "話題", icon: "📈" },
 ];
 
 export function SiteHeader({
@@ -30,7 +30,15 @@ export function SiteHeader({
                 href={item.href}
                 className="text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
               >
-                {item.label}
+                <span className="inline-flex items-center gap-1.5">
+                  <span aria-hidden>{item.icon}</span>
+                  <span>
+                    {item.label}
+                    <span className="ml-1 hidden text-zinc-400 lg:inline dark:text-zinc-500">
+                      / {item.sublabel}
+                    </span>
+                  </span>
+                </span>
               </Link>
             ))}
           </nav>
@@ -38,6 +46,12 @@ export function SiteHeader({
         <div className="flex items-center gap-3">
           {signedIn ? (
             <>
+              <Link
+                href="/my-listings"
+                className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+              >
+                自分の投稿
+              </Link>
               <Link
                 href="/safety"
                 className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
@@ -78,7 +92,10 @@ export function SiteHeader({
               href={item.href}
               className="text-xs font-medium text-zinc-600 dark:text-zinc-400"
             >
-              {item.label}
+              <span className="inline-flex items-center gap-1">
+                <span aria-hidden>{item.icon}</span>
+                <span>{item.sublabel}</span>
+              </span>
             </Link>
           ))}
         </nav>

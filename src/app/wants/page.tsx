@@ -19,6 +19,7 @@ type WantRow = {
   created_at: string;
   need_by_on: string | null;
   timing_flexible: boolean;
+  is_seed: boolean;
 };
 
 const WANT_STATUSES = [
@@ -44,7 +45,7 @@ export default async function WantsPage({
   let dbQuery = supabase
     .from("wants")
     .select(
-      "id, title, description, category, status, image_urls, created_at, need_by_on, timing_flexible",
+      "id, title, description, category, status, image_urls, created_at, need_by_on, timing_flexible, is_seed",
     );
 
   if (filters.category) {
@@ -115,6 +116,7 @@ export default async function WantsPage({
                 excerpt={w.description}
                 imageUrl={firstImageUrl(w.image_urls)}
                 scheduleLines={lines}
+                isSample={w.is_seed}
                 meta={`更新 / Diperbarui ${formatRelativeTime(w.created_at)}`}
               />
             );

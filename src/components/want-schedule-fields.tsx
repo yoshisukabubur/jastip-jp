@@ -1,3 +1,5 @@
+"use client";
+
 import { ScheduleDisclaimer } from "@/components/schedule-disclaimer";
 
 const inputClass =
@@ -23,7 +25,12 @@ export function WantScheduleFields({
           name="need_by_on"
           defaultValue={needByOn}
           className={inputClass}
+          onFocus={(event) => event.currentTarget.showPicker?.()}
+          onClick={(event) => event.currentTarget.showPicker?.()}
         />
+        <span className="block text-xs text-zinc-500 dark:text-zinc-400">
+          カレンダーから日付を選択できます。
+        </span>
       </label>
       <label className="flex items-start gap-3">
         <input

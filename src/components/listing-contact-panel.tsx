@@ -1,5 +1,6 @@
 import type { ContactPanelState } from "@/lib/listing-contact";
 import type { ContactLink } from "@/lib/contact-urls";
+import { createContactRequest } from "@/app/contact-requests/actions";
 import Link from "next/link";
 
 const CHANNEL_STYLES: Record<ContactLink["channel"], string> = {
@@ -48,10 +49,12 @@ function ContactButtons({
 export function ListingContactPanel({
   listingType,
   listingId,
+  returnTo,
   state,
 }: {
   listingType: "want" | "offer";
   listingId: string;
+  returnTo: string;
   state: ContactPanelState;
 }) {
   const loginNext = `/${listingType === "want" ? "wants" : "offers"}/${listingId}`;
@@ -91,9 +94,29 @@ export function ListingContactPanel({
       ) : null}
 
       {state.status === "no-contact" ? (
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          投稿者がまだ連絡先を登録していません。
-        </p>
+        <div className="space-y-3">
+          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+            投稿者がまだ連絡先を登録していません。代わりにこのフォームで連絡リクエストを送れます。
+          </p>
+          <form action={createContactRequest} className="space-y-2">
+            <input type="hidden" name="listing_type" value={listingType} />
+            <input type="hidden" name="listing_id" value={listingId} />
+            <input type="hidden" name="return_to" value={returnTo} />
+            <textarea
+              name="message"
+              rows={3}
+              required
+              className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
+              placeholder="例: こんにちは。こちらの商品について相談したいです。"
+            />
+            <button
+              type="submit"
+              className="rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+            >
+              連絡リクエストを送る
+            </button>
+          </form>
+        </div>
       ) : null}
 
       {state.status === "ready" ? (

@@ -17,9 +17,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "JastipJP — Japan shopping wants, offers, and trends",
+  title: "JastipJP — Papan titip Jepang ↔ Indonesia",
   description:
-    "Classified-style listings for Japan proxy shopping: wants, offers, and market trends.",
+    "掲示板で日本とインドネシアの代行をつなぐ。Wants（欲しいもの）と Offers（買えます）を無料で投稿。",
 };
 
 export const dynamic = "force-dynamic";

@@ -25,6 +25,9 @@ type WantDetail = {
   is_seed: boolean;
   need_by_on: string | null;
   timing_flexible: boolean;
+  delivery_city: string | null;
+  delivery_region: string | null;
+  delivery_note: string | null;
   users: UserEmbed;
 };
 
@@ -39,7 +42,13 @@ export default async function WantDetailPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ report?: string; saved?: string; error?: string }>;
+  searchParams: Promise<{
+    report?: string;
+    saved?: string;
+    created?: string;
+    contact_request?: string;
+    error?: string;
+  }>;
 }) {
   const { id } = await params;
   const query = await searchParams;
@@ -50,7 +59,7 @@ export default async function WantDetailPage({
   const { data } = await supabase
     .from("wants")
     .select(
-      "id, title, description, category, status, image_urls, created_at, user_id, is_seed, need_by_on, timing_flexible, users ( display_name )",
+      "id, title, description, category, status, image_urls, created_at, user_id, is_seed, need_by_on, timing_flexible, delivery_city, delivery_region, delivery_note, users ( display_name )",
     )
     .eq("id", id)
     .maybeSingle();
@@ -96,6 +105,16 @@ export default async function WantDetailPage({
           保存しました。
         </p>
       ) : null}
+      {query.created ? (
+        <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
+          投稿を公開しました。
+        </p>
+      ) : null}
+      {query.contact_request === "sent" ? (
+        <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
+          連絡リクエストを送信しました。
+        </p>
+      ) : null}
       {query.error ? (
         <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
           {decodeURIComponent(query.error)}
@@ -119,6 +138,11 @@ export default async function WantDetailPage({
           <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
             {want.status}
           </span>
+          {want.is_seed ? (
+            <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600 dark:bg-zinc-900 dark:text-zinc-400">
+              Contoh / サンプル
+            </span>
+          ) : null}
         </div>
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">{want.title}</h1>
@@ -134,6 +158,26 @@ export default async function WantDetailPage({
         ) : null}
         <ScheduleDisclaimer />
         <DetailScheduleBlock lines={scheduleLines} />
+        {want.delivery_city || want.delivery_region || want.delivery_note ? (
+          <section className="rounded-2xl border border-zinc-200 p-5 dark:border-zinc-800">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-700 dark:text-zinc-300">
+              配送先 / Tujuan pengiriman
+            </h2>
+            <div className="mt-3 space-y-1 text-sm text-zinc-700 dark:text-zinc-300">
+              {want.delivery_city || want.delivery_region ? (
+                <p>
+                  {want.delivery_city ?? "-"}
+                  {want.delivery_region ? `, ${want.delivery_region}` : ""}
+                </p>
+              ) : null}
+              {want.delivery_note ? (
+                <p className="whitespace-pre-wrap text-zinc-600 dark:text-zinc-400">
+                  {want.delivery_note}
+                </p>
+              ) : null}
+            </div>
+          </section>
+        ) : null}
         {images.length > 0 ? (
           <div className="grid gap-3 sm:grid-cols-2">
             {images.map((src) => (
@@ -159,6 +203,7 @@ export default async function WantDetailPage({
         <ListingContactPanel
           listingType="want"
           listingId={want.id}
+          returnTo={`/wants/${want.id}`}
           state={contactState}
         />
         <section className="rounded-2xl border border-zinc-200 p-5 dark:border-zinc-800">

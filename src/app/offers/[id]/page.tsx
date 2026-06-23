@@ -45,7 +45,13 @@ export default async function OfferDetailPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ report?: string; saved?: string; error?: string }>;
+  searchParams: Promise<{
+    report?: string;
+    saved?: string;
+    created?: string;
+    contact_request?: string;
+    error?: string;
+  }>;
 }) {
   const { id } = await params;
   const query = await searchParams;
@@ -104,6 +110,16 @@ export default async function OfferDetailPage({
           保存しました。
         </p>
       ) : null}
+      {query.created ? (
+        <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
+          投稿を公開しました。
+        </p>
+      ) : null}
+      {query.contact_request === "sent" ? (
+        <p className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
+          連絡リクエストを送信しました。
+        </p>
+      ) : null}
       {query.error ? (
         <p className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
           {decodeURIComponent(query.error)}
@@ -127,6 +143,11 @@ export default async function OfferDetailPage({
           <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-900 dark:bg-emerald-950 dark:text-emerald-100">
             {offer.status}
           </span>
+          {offer.is_seed ? (
+            <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-600 dark:bg-zinc-900 dark:text-zinc-400">
+              Contoh / サンプル
+            </span>
+          ) : null}
         </div>
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">{offer.title}</h1>
@@ -170,6 +191,7 @@ export default async function OfferDetailPage({
         <ListingContactPanel
           listingType="offer"
           listingId={offer.id}
+          returnTo={`/offers/${offer.id}`}
           state={contactState}
         />
         <section className="rounded-2xl border border-zinc-200 p-5 dark:border-zinc-800">

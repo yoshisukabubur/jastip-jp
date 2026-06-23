@@ -22,6 +22,7 @@ type OfferRow = {
   heading_to_indonesia_on: string | null;
   order_cutoff_on: string | null;
   schedule_note: string | null;
+  is_seed: boolean;
 };
 
 const OFFER_STATUSES = [
@@ -47,7 +48,7 @@ export default async function OffersPage({
   let dbQuery = supabase
     .from("offers")
     .select(
-      "id, title, description, category, status, image_urls, created_at, shop_in_japan_on, heading_to_indonesia_on, order_cutoff_on, schedule_note",
+      "id, title, description, category, status, image_urls, created_at, shop_in_japan_on, heading_to_indonesia_on, order_cutoff_on, schedule_note, is_seed",
     );
 
   if (filters.category) {
@@ -121,6 +122,7 @@ export default async function OffersPage({
                 imageUrl={firstImageUrl(o.image_urls)}
                 scheduleLines={lines}
                 scheduleExpired={offerScheduleExpired(schedule)}
+                isSample={o.is_seed}
                 meta={`更新 / Diperbarui ${formatRelativeTime(o.created_at)}`}
               />
             );

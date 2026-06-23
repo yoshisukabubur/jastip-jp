@@ -1,6 +1,10 @@
 import { updateOffer } from "@/app/offers/actions";
 import { OfferScheduleFields } from "@/components/offer-schedule-fields";
-import { formatImageUrlsForInput } from "@/lib/image-urls";
+import {
+  LISTING_CATEGORIES,
+  LISTING_TEMPLATE_IMAGES,
+  templateImageIdFromImageUrls,
+} from "@/lib/listing-media";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -47,7 +51,16 @@ export default async function EditOfferPage({
   const offer = data as OfferRow;
   if (offer.user_id !== user.id) redirect(`/offers/${id}`);
 
-  const imageUrlsText = formatImageUrlsForInput(offer.image_urls);
+  const templateImageId =
+    templateImageIdFromImageUrls(offer.image_urls) ?? LISTING_TEMPLATE_IMAGES[0]?.id;
+  const imageUrls = Array.isArray(offer.image_urls)
+    ? offer.image_urls.filter((url): url is string => typeof url === "string")
+    : [];
+  const customImageUrl =
+    imageUrls[0] &&
+    !LISTING_TEMPLATE_IMAGES.some((template) => template.url === imageUrls[0])
+      ? imageUrls[0]
+      : "";
 
   return (
     <main className="mx-auto max-w-xl space-y-8 px-4 py-12">
@@ -83,11 +96,18 @@ export default async function EditOfferPage({
         </label>
         <label className="block space-y-2">
           <span className="text-sm font-medium">Category</span>
-          <input
+          <select
             name="category"
-            defaultValue={offer.category ?? ""}
+            required
+            defaultValue={offer.category ?? "beauty"}
             className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
-          />
+          >
+            {LISTING_CATEGORIES.map((category) => (
+              <option key={category.value} value={category.value}>
+                {category.label}
+              </option>
+            ))}
+          </select>
         </label>
         <label className="block space-y-2">
           <span className="text-sm font-medium">Description</span>
@@ -105,12 +125,34 @@ export default async function EditOfferPage({
           scheduleNote={offer.schedule_note ?? ""}
         />
         <label className="block space-y-2">
-          <span className="text-sm font-medium">Image URLs</span>
-          <textarea
-            name="image_urls"
-            rows={3}
-            defaultValue={imageUrlsText}
+          <span className="text-sm font-medium">Template image (required)</span>
+          <select
+            name="template_image_id"
+            required
+            defaultValue={templateImageId}
             className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
+          >
+            {LISTING_CATEGORIES.map((category) => (
+              <optgroup key={category.value} label={category.label}>
+                {LISTING_TEMPLATE_IMAGES.filter(
+                  (template) => template.category === category.value,
+                ).map((template) => (
+                  <option key={template.id} value={template.id}>
+                    {template.label}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+        </label>
+        <label className="block space-y-2">
+          <span className="text-sm font-medium">Additional image URL (optional)</span>
+          <input
+            name="custom_image_url"
+            type="url"
+            defaultValue={customImageUrl}
+            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm shadow-inner outline-none ring-emerald-500/30 focus:ring-2 dark:border-zinc-800 dark:bg-zinc-950"
+            placeholder="https://..."
           />
         </label>
         <label className="block space-y-2">

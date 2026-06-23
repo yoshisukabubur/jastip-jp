@@ -1,3 +1,5 @@
+"use client";
+
 import { ScheduleDisclaimer } from "@/components/schedule-disclaimer";
 
 const inputClass =
@@ -29,7 +31,12 @@ export function OfferScheduleFields({
           name="shop_in_japan_on"
           defaultValue={shopInJapanOn}
           className={inputClass}
+          onFocus={(event) => event.currentTarget.showPicker?.()}
+          onClick={(event) => event.currentTarget.showPicker?.()}
         />
+        <span className="block text-xs text-zinc-500 dark:text-zinc-400">
+          カレンダーから日付を選択できます。
+        </span>
       </label>
       <label className="block space-y-2">
         <span className="text-sm font-medium">
@@ -40,6 +47,8 @@ export function OfferScheduleFields({
           name="heading_to_indonesia_on"
           defaultValue={headingToIndonesiaOn}
           className={inputClass}
+          onFocus={(event) => event.currentTarget.showPicker?.()}
+          onClick={(event) => event.currentTarget.showPicker?.()}
         />
         <span className="block text-xs text-zinc-500 dark:text-zinc-400">
           届く日の約束ではありません。便・税関で変わります。
@@ -52,6 +61,8 @@ export function OfferScheduleFields({
           name="order_cutoff_on"
           defaultValue={orderCutoffOn}
           className={inputClass}
+          onFocus={(event) => event.currentTarget.showPicker?.()}
+          onClick={(event) => event.currentTarget.showPicker?.()}
         />
       </label>
       <label className="block space-y-2">

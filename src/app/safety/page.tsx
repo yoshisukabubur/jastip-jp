@@ -17,6 +17,39 @@ const CHECKLIST = [
   "投稿の日程・免責を読んでから連絡する",
 ];
 
+const PROHIBITED_ITEMS = [
+  {
+    category: "法令で禁止されるもの / Barang terlarang",
+    items: [
+      "違法薬物・危険ドラッグ / narkotika",
+      "銃器・弾薬・武器類 / senjata dan amunisi",
+      "偽ブランド品・海賊版 / barang palsu",
+    ],
+  },
+  {
+    category: "トラブルになりやすいもの / Barang berisiko tinggi",
+    items: [
+      "処方薬・医療用成分を含む商品 / obat resep",
+      "アルコール・タバコ・電子タバコ / alkohol, rokok, vape",
+      "生鮮食品・肉製品・植物種子 / makanan segar, daging, benih",
+    ],
+  },
+  {
+    category: "取り扱わない方針 / Tidak didukung",
+    items: [
+      "現金同等物（ギフト券・プリペイド） / setara uang tunai",
+      "大型・重量物（配送事故リスク） / barang terlalu besar/berat",
+      "真贋判定が難しい高額品 / barang mahal sulit verifikasi",
+    ],
+  },
+];
+
+const CUSTOMS_NOTES = [
+  "化粧品・サプリ・医薬品系は成分や数量で止まることがあります。",
+  "食品（肉・生もの・種子）は国や時期で規制が変わるため事前確認が必要です。",
+  "高額品はインボイス価格と実物が合わないと遅延・追加確認になりやすいです。",
+];
+
 export default async function SafetyPage({
   searchParams,
 }: {
@@ -89,6 +122,46 @@ export default async function SafetyPage({
             </Link>
             をご確認ください。
           </li>
+        </ul>
+      </section>
+
+      <section className="space-y-4 rounded-3xl border border-red-200 bg-red-50/60 p-6 dark:border-red-900 dark:bg-red-950/30">
+        <h2 className="text-lg font-semibold text-red-900 dark:text-red-100">
+          依頼できない商品 / Barang yang tidak boleh dititipkan
+        </h2>
+        <p className="text-sm text-red-900/90 dark:text-red-100/90">
+          下記は JastipJP で依頼・出品を受けない方針です。迷う場合は投稿前に確認してください。
+        </p>
+        <div className="space-y-3">
+          {PROHIBITED_ITEMS.map((group) => (
+            <div
+              key={group.category}
+              className="rounded-2xl border border-red-200 bg-white/80 p-4 dark:border-red-900/60 dark:bg-zinc-950/40"
+            >
+              <h3 className="text-sm font-semibold text-red-900 dark:text-red-100">
+                {group.category}
+              </h3>
+              <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-zinc-700 dark:text-zinc-300">
+                {group.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="space-y-4 rounded-3xl border border-sky-200 bg-sky-50/60 p-6 dark:border-sky-900 dark:bg-sky-950/30">
+        <h2 className="text-lg font-semibold text-sky-900 dark:text-sky-100">
+          税関で注意が必要な商品 / Barang yang sering tertahan bea cukai
+        </h2>
+        <p className="text-sm text-sky-900/90 dark:text-sky-100/90">
+          最終判断は各国税関です。投稿前に「品目・数量・価格」を相手と確認してください。
+        </p>
+        <ul className="list-inside list-disc space-y-1 text-sm text-zinc-700 dark:text-zinc-300">
+          {CUSTOMS_NOTES.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
         </ul>
       </section>
 

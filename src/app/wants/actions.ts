@@ -1,10 +1,14 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { parseImageUrls } from "@/lib/image-urls";
+import { templateImageById } from "@/lib/listing-media";
 import { parseOptionalDate, parseTimingFlexible } from "@/lib/schedule-dates";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+
+function optionalText(formData: FormData, key: string) {
+  return String(formData.get(key) ?? "").trim() || null;
+}
 
 export async function createWant(formData: FormData) {
   const supabase = await createClient();
@@ -16,14 +20,22 @@ export async function createWant(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim() || null;
   const category = String(formData.get("category") ?? "").trim() || null;
-  const status = String(formData.get("status") ?? "active").trim() || "active";
-  const image_urls = parseImageUrls(String(formData.get("image_urls") ?? ""));
+  const templateImageId = String(formData.get("template_image_id") ?? "").trim();
+  const customImageUrl = String(formData.get("custom_image_url") ?? "").trim();
   const need_by_on = parseOptionalDate(formData.get("need_by_on"));
   const timing_flexible = parseTimingFlexible(formData.get("timing_flexible"));
+  const delivery_city = optionalText(formData, "delivery_city");
+  const delivery_region = optionalText(formData, "delivery_region");
+  const delivery_note = optionalText(formData, "delivery_note");
 
   if (!title) {
     redirect("/wants/new?error=missing-title");
   }
+  const template = templateImageById(templateImageId);
+  if (!template) {
+    redirect("/wants/new?error=template-required");
+  }
+  const image_urls = customImageUrl ? [customImageUrl, template.url] : [template.url];
 
   const { data, error } = await supabase
     .from("wants")
@@ -32,10 +44,13 @@ export async function createWant(formData: FormData) {
       title,
       description,
       category,
-      status,
+      status: "active",
       image_urls,
       need_by_on,
       timing_flexible,
+      delivery_city,
+      delivery_region,
+      delivery_note,
     })
     .select("id")
     .single();
@@ -45,18 +60,28 @@ export async function createWant(formData: FormData) {
   }
 
   revalidatePath("/wants");
-  redirect(`/wants/${data.id}`);
+  redirect(`/wants/${data.id}?created=1`);
 }
 
 function wantFieldsFromForm(formData: FormData) {
+  const templateImageId = String(formData.get("template_image_id") ?? "").trim();
+  const template = templateImageById(templateImageId);
+  const customImageUrl = String(formData.get("custom_image_url") ?? "").trim();
   return {
     title: String(formData.get("title") ?? "").trim(),
     description: String(formData.get("description") ?? "").trim() || null,
     category: String(formData.get("category") ?? "").trim() || null,
     status: String(formData.get("status") ?? "active").trim() || "active",
-    image_urls: parseImageUrls(String(formData.get("image_urls") ?? "")),
+    image_urls: template
+      ? customImageUrl
+        ? [customImageUrl, template.url]
+        : [template.url]
+      : [],
     need_by_on: parseOptionalDate(formData.get("need_by_on")),
     timing_flexible: parseTimingFlexible(formData.get("timing_flexible")),
+    delivery_city: optionalText(formData, "delivery_city"),
+    delivery_region: optionalText(formData, "delivery_region"),
+    delivery_note: optionalText(formData, "delivery_note"),
   };
 }
 
@@ -73,6 +98,9 @@ export async function updateWant(formData: FormData) {
   const fields = wantFieldsFromForm(formData);
   if (!fields.title) {
     redirect(`/wants/${id}/edit?error=missing-title`);
+  }
+  if (!fields.image_urls.length) {
+    redirect(`/wants/${id}/edit?error=template-required`);
   }
 
   const { error } = await supabase
