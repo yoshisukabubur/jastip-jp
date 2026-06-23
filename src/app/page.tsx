@@ -120,6 +120,49 @@ export default function Home() {
                 </p>
               </div>
             ))}
+            <div className="space-y-2 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+              <p className="text-center text-xs font-medium text-zinc-600 dark:text-zinc-400">
+                Langsung posting / 今すぐ投稿
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <Link
+                  href="/wants/new"
+                  className="flex flex-col items-center gap-1 rounded-2xl bg-emerald-600 px-3 py-3 text-center text-white shadow-sm transition hover:bg-emerald-700"
+                >
+                  <span className="text-xl" aria-hidden>
+                    🎯
+                  </span>
+                  <span className="text-xs font-semibold leading-tight sm:text-sm">
+                    欲しいもの
+                  </span>
+                  <span className="text-[10px] font-medium text-emerald-100 sm:text-xs">
+                    Cari barang
+                  </span>
+                </Link>
+                <Link
+                  href="/offers/new"
+                  className="flex flex-col items-center gap-1 rounded-2xl border-2 border-emerald-600 bg-white px-3 py-3 text-center text-emerald-800 shadow-sm transition hover:bg-emerald-50 dark:bg-zinc-950 dark:text-emerald-300 dark:hover:bg-emerald-950/40"
+                >
+                  <span className="text-xl" aria-hidden>
+                    🛍️
+                  </span>
+                  <span className="text-xs font-semibold leading-tight sm:text-sm">
+                    買えます
+                  </span>
+                  <span className="text-[10px] font-medium text-emerald-700/80 dark:text-emerald-400/80 sm:text-xs">
+                    Bisa bantu
+                  </span>
+                </Link>
+              </div>
+              <div className="flex justify-center gap-4 text-[11px] text-zinc-500">
+                <Link href="/wants" className="hover:text-emerald-700 dark:hover:text-emerald-400">
+                  Wants 一覧
+                </Link>
+                <Link href="/offers" className="hover:text-emerald-700 dark:hover:text-emerald-400">
+                  Offers 一覧
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
