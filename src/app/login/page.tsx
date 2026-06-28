@@ -1,4 +1,5 @@
 import { GoogleSignInButton } from "@/components/google-sign-in-button";
+import { InAppBrowserNotice } from "@/components/in-app-browser-notice";
 import Link from "next/link";
 
 export default async function LoginPage({
@@ -23,6 +24,7 @@ export default async function LoginPage({
           Something went wrong with authentication. Please try again.
         </p>
       ) : null}
+      <InAppBrowserNotice />
       <GoogleSignInButton />
       <p className="text-center text-xs text-zinc-500">
         By continuing you agree to your identity provider&apos;s terms.{" "}
